@@ -8,6 +8,12 @@ fun main() {
         expectedSampleResultDay2Puzzle1 == solverDay02.solvePuzzle1ByDeterminingNumberOfSafeReports("example-input-day-02.txt"),
     ) { "Example solution for first puzzle of day 2 should be $expectedSampleResultDay2Puzzle1!" }
     println("Solution Day 2, Puzzle 1: " + solverDay02.solvePuzzle1ByDeterminingNumberOfSafeReports("input-day-02.txt")) // 369
+    // Day 02, second Puzzle
+    val expectedSampleResultDay2Puzzle2 = 5
+    require(
+        expectedSampleResultDay2Puzzle2 == solverDay02.solvePuzzle2ByDeterminingNumberOfSafeReportsWithDampener("example-input-day-02.txt"),
+    ) { "Example solution for first puzzle of day 2 should be $expectedSampleResultDay2Puzzle2!" }
+    println("Solution Day 2, Puzzle 2: " + solverDay02.solvePuzzle2ByDeterminingNumberOfSafeReportsWithDampener("input-day-02.txt")) //
 
 
     /*
