@@ -1,17 +1,17 @@
 package de.ptrckkk.aoc24.day01
 
-import de.ptrckkk.aoc24.util.InputUtil
+import de.ptrckkk.aoc24.PerDayPuzzleSolver
 import kotlin.math.abs
 
-class SolverDay01 {
-
-    private val inputUtil = InputUtil()
+class PuzzleSolverDay01: PerDayPuzzleSolver() {
 
     /**
      * For the task description, see
      * [https://adventofcode.com/2024/day/1](https://adventofcode.com/2024/day/1).
+     *
+     * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    fun solvePuzzle1ByComputingTotalDistance(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Int {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (list1, list2) = inputUtil.readTwoNumbersWhichAreSeparatedBySpaces(fileContent)
         val sortedList1 = list1.sorted()
@@ -22,8 +22,10 @@ class SolverDay01 {
     /**
      * For the task description, see
      * [https://adventofcode.com/2024/day/1#part2](https://adventofcode.com/2024/day/1#part2).
+     *
+     * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    fun solvePuzzle2ByComputingSimilarityScore(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Int {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (list1, list2) = inputUtil.readTwoNumbersWhichAreSeparatedBySpaces(fileContent)
         return computeSimilarityScoreForLists(list1, list2)
