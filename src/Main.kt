@@ -1,5 +1,6 @@
 import de.ptrckkk.aoc24.PuzzleSolverDay01
 import de.ptrckkk.aoc24.PuzzleSolverDay02
+import de.ptrckkk.aoc24.PuzzleSolverDay03
 
 /**
  * Asserts that the [expected] value equals the [actual] value. If these values are not the same, the given [message]
@@ -12,6 +13,23 @@ fun assertResult(expected: Int, actual: Int, message: String) {
 }
 
 fun main() {
+    // Day 3, example Puzzle 1
+    val solverDay03 = PuzzleSolverDay03()
+    val actualSampleResultDay3Puzzle1 = solverDay03.solvePuzzleOne("example-input-day-03.txt")
+    assertResult(161, actualSampleResultDay3Puzzle1, "Solution for 'Example Day 3, Puzzle 1' wrong")
+
+    // Day 3, Puzzle 1
+    val actualResultDay3Puzzle1 = solverDay03.solvePuzzleOne("input-day-03.txt")
+    assertResult(191183308, actualResultDay3Puzzle1, "Solution for 'Day 3, Puzzle 1' wrong")
+
+    // Day 3, example Puzzle 2
+//    val actualSampleResultDay3Puzzle2 = solverDay03.solvePuzzleTwo("example-input-day-03.txt")
+//    assertResult(4, actualSampleResultDay3Puzzle2, "Solution for 'Example Day 3, Puzzle 2' wrong")
+
+    // Day 3, Puzzle 2
+//    val actualResultDay3Puzzle2 = solverDay03.solvePuzzleTwo("input-day-03.txt")
+//    assertResult(428, actualResultDay3Puzzle2, "Solution for 'Day 3, Puzzle 2' wrong")
+
     // Day 2, example Puzzle 1
     val solverDay02 = PuzzleSolverDay02()
     val actualSampleResultDay2Puzzle1 = solverDay02.solvePuzzleOne("example-input-day-02.txt")
