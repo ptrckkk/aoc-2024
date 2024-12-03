@@ -20,7 +20,7 @@ class PuzzleSolverDay02 : PerDayPuzzleSolver() {
      * For the task description, see
      * [https://adventofcode.com/2024/day/2#part2](https://adventofcode.com/2024/day/2#part2).
      *
-     * @see [PerDayPuzzleSolver.solvePuzzleOne]
+     * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
     override fun solvePuzzleTwo(pathToInputFile: String): Int {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
