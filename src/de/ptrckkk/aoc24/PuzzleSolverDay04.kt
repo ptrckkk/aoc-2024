@@ -42,7 +42,9 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
     override fun solvePuzzleTwo(pathToInputFile: String): Int {
-        TODO("Not yet implemented")
+        val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
+        val letterGrid = fileContentTo2DArray(fileContent)
+        return findNumberOfXmasCrosses(letterGrid)
     }
 
     private fun fileContentTo2DArray(fileContent: List<String>): TwoDGrid {
@@ -156,13 +158,63 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         return count
     }
 
-    private fun findOccurrencesInLinesBackward(letterGrid: List<List<Char>>): Int {
+    private fun findOccurrencesInLinesBackward(letterGrid: TwoDGrid): Int {
         var count = 0
         letterGrid.forEach { row ->
             val stringifiedRow = row.reversed().joinToString("")
             count += REG_EX_WORD_TO_FIND.findAll(stringifiedRow).count()
         }
         return count
+    }
+
+    private fun findNumberOfXmasCrosses(letterGrid: TwoDGrid): Int {
+        var totalCount = 0
+        var row = 1
+        var column = 1
+
+        while (row < letterGrid.size - 1) {
+            while (column < letterGrid[row].size - 1) {
+                if (letterGrid[row][column] == 'A') {
+                    // Find
+                    // M     M
+                    //    A
+                    // S     S
+                    if (letterGrid[row-1][column-1] == 'M' && letterGrid[row+1][column+1] == 'S' &&
+                        letterGrid[row-1][column+1] == 'M' && letterGrid[row+1][column-1] == 'S') {
+                        totalCount++
+                    }
+                    // Find
+                    // M     S
+                    //    A
+                    // M     S
+                    else if (letterGrid[row-1][column-1] == 'M' && letterGrid[row+1][column+1] == 'S' &&
+                        letterGrid[row-1][column+1] == 'S' && letterGrid[row+1][column-1] == 'M') {
+                        totalCount++
+                    }
+                    // Find
+                    // S     M
+                    //    A
+                    // S     M
+                    else if (letterGrid[row-1][column-1] == 'S' && letterGrid[row+1][column+1] == 'M' &&
+                        letterGrid[row-1][column+1] == 'M' && letterGrid[row+1][column-1] == 'S') {
+                        totalCount++
+                    }
+                    // Find
+                    // S     S
+                    //    A
+                    // M     M
+                    else if (letterGrid[row-1][column-1] == 'S' && letterGrid[row+1][column+1] == 'M' &&
+                        letterGrid[row-1][column+1] == 'S' && letterGrid[row+1][column-1] == 'M') {
+                        totalCount++
+                    }
+                }
+                column++
+            }
+            column = 1
+            row ++
+        }
+
+        return totalCount
     }
 
 }

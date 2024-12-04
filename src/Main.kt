@@ -24,12 +24,12 @@ fun main() {
     assertResult(2500, actualResultDay4Puzzle1, "Solution for 'Day 4, Puzzle 1' wrong")
 
     // Day 4, example Puzzle 2
-    val actualSampleResultDay4Puzzle2 = solverDay04.solvePuzzleTwo("example-input-day-04.txt")
-    assertResult(0, actualSampleResultDay4Puzzle2, "Solution for 'Example Day 4, Puzzle 2' wrong")
+    val actualSampleResultDay4Puzzle2 = solverDay04.solvePuzzleTwo("example-input-day-04-puzzle-2.txt")
+    assertResult(9, actualSampleResultDay4Puzzle2, "Solution for 'Example Day 4, Puzzle 2' wrong")
 
     // Day 4, Puzzle 2
     val actualResultDay4Puzzle2 = solverDay04.solvePuzzleTwo("input-day-04.txt")
-    assertResult(0, actualResultDay4Puzzle2, "Solution for 'Day 4, Puzzle 2' wrong")
+    assertResult(1933, actualResultDay4Puzzle2, "Solution for 'Day 4, Puzzle 2' wrong")
 
     // Day 3, example Puzzle 1
     val solverDay03 = PuzzleSolverDay03()
