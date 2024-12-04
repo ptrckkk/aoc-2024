@@ -1,34 +1,48 @@
+import de.ptrckkk.aoc24.day01.PuzzleSolverDay01
 import de.ptrckkk.aoc24.day02.SolverDay02
 
+/**
+ * Asserts that the [expected] value equals the [actual] value. If these values are not the same, the given [message]
+ * is output along with the [expected] and [actual] values.
+ */
+fun assertResult(expected: Int, actual: Int, message: String) {
+    require(
+        expected == actual,
+    ) { "$message! expected=$expected != actual=$actual" }
+}
+
 fun main() {
-    // Day 02, first Puzzle
+    // Day 2, example Puzzle 1
     val solverDay02 = SolverDay02()
-    val expectedSampleResultDay2Puzzle1 = 2
-    require(
-        expectedSampleResultDay2Puzzle1 == solverDay02.solvePuzzle1ByDeterminingNumberOfSafeReports("example-input-day-02.txt"),
-    ) { "Example solution for first puzzle of day 2 should be $expectedSampleResultDay2Puzzle1!" }
-    println("Solution Day 2, Puzzle 1: " + solverDay02.solvePuzzle1ByDeterminingNumberOfSafeReports("input-day-02.txt")) // 369
-    // Day 02, second Puzzle
-    val expectedSampleResultDay2Puzzle2 = 5
-    require(
-        expectedSampleResultDay2Puzzle2 == solverDay02.solvePuzzle2ByDeterminingNumberOfSafeReportsWithDampener("example-input-day-02.txt"),
-    ) { "Example solution for first puzzle of day 2 should be $expectedSampleResultDay2Puzzle2!" }
-    println("Solution Day 2, Puzzle 2: " + solverDay02.solvePuzzle2ByDeterminingNumberOfSafeReportsWithDampener("input-day-02.txt")) //
+    val actualSampleResultDay2Puzzle1 = solverDay02.solvePuzzleOne("example-input-day-02.txt")
+    assertResult(2, actualSampleResultDay2Puzzle1, "Solution for 'Example Day 2, Puzzle 1' wrong")
 
+    // Day 2, Puzzle 1
+    val actualResultDay2Puzzle1 = solverDay02.solvePuzzleOne("input-day-02.txt")
+    assertResult(369, actualResultDay2Puzzle1, "Solution for 'Day 2, Puzzle 1' wrong")
 
-    /*
-    // Day 01, first Puzzle
-    val solverDay01 = SolverDay01()
-    val expectedSampleResultDay1Puzzle1 = 11
-    require(
-        expectedSampleResultDay1Puzzle1 == solverDay01.solvePuzzle1ByComputingTotalDistance("example-input-day-01.txt"),
-    ) { "Example solution for first puzzle of day 1 should be $expectedSampleResultDay1Puzzle1!" }
-    println("Solution Day 1, Puzzle 1: " + solverDay01.solvePuzzle1ByComputingTotalDistance("input-day-01.txt"))
-    // Day 02, second Puzzle
-    val expectedSampleResultDay1Puzzle2 = 31
-    require(
-        expectedSampleResultDay1Puzzle2 == solverDay01.solvePuzzle2ByComputingSimilarityScore("example-input-day-01.txt"),
-    ) { "Example solution for seconds puzzle of day 1 should be $expectedSampleResultDay1Puzzle2!" }
-    println("Solution Day 1, Puzzle 2: " + solverDay01.solvePuzzle2ByComputingSimilarityScore("input-day-01.txt"))
-    */
+    // Day 2, example Puzzle 2
+    val actualSampleResultDay2Puzzle2 = solverDay02.solvePuzzleTwo("example-input-day-02.txt")
+    assertResult(4, actualSampleResultDay2Puzzle2, "Solution for 'Example Day 2, Puzzle 2' wrong")
+
+    // Day 2, Puzzle 2
+    val actualResultDay2Puzzle2 = solverDay02.solvePuzzleTwo("input-day-02.txt")
+    assertResult(428, actualResultDay2Puzzle2, "Solution for 'Day 2, Puzzle 2' wrong")
+
+    // Day 1, example Puzzle 1
+    val solverDay01 = PuzzleSolverDay01()
+    val actualSampleResultDay1Puzzle1 = solverDay01.solvePuzzleOne("example-input-day-01.txt")
+    assertResult(11, actualSampleResultDay1Puzzle1, "Solution for 'Example Day 1, Puzzle 1' wrong")
+
+    // Day 1, Puzzle 1
+    val actualResultDay1Puzzle1 = solverDay01.solvePuzzleOne("input-day-01.txt")
+    assertResult(1941353, actualResultDay1Puzzle1, "Solution for 'Day 1, Puzzle 1' wrong")
+
+    // Day 1, example Puzzle 2
+    val actualSampleResultDay1Puzzle2 = solverDay01.solvePuzzleTwo("example-input-day-01.txt")
+    assertResult(31, actualSampleResultDay1Puzzle2, "Solution for 'Example Day 1, Puzzle 2' wrong")
+
+    // Day 1, Puzzle 2
+    val actualResultDay1Puzzle2 = solverDay01.solvePuzzleTwo("input-day-01.txt")
+    assertResult(22539317, actualResultDay1Puzzle2, "Solution for 'Day 1, Puzzle 2' wrong")
 }
