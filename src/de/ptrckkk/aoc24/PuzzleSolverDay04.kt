@@ -1,6 +1,6 @@
 package de.ptrckkk.aoc24
 
-private typealias TwoDGrid = List<List<Char>>
+private typealias TwoDLetterGrid = List<List<Char>>
 
 class PuzzleSolverDay04 : PerDayPuzzleSolver() {
 
@@ -47,19 +47,41 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         return findNumberOfXmasCrosses(letterGrid)
     }
 
-    private fun fileContentTo2DArray(fileContent: List<String>): TwoDGrid {
-        val outerArray = mutableListOf<List<Char>>()
-        fileContent.forEach { line ->
-            val innerArray = mutableListOf<Char>()
-            line.forEach { char ->
-                innerArray.add(char)
+    /**
+     * Transform the given [fileContent] into a two-dimensional letter grid/array by mapping each letter in
+     * [fileContent] to an entry in the returned grid.
+     */
+    private fun fileContentTo2DArray(fileContent: List<String>): TwoDLetterGrid =
+        List(fileContent.size) { lineIndex ->
+            List(fileContent[lineIndex].length) { charIndex ->
+                fileContent[lineIndex][charIndex]
             }
-            outerArray.add(innerArray.toList())
         }
-        return outerArray.toList()
+
+    /**
+     * Higher-order function for solving the puzzles.
+     *
+     * [resultCountFun] is applied for each and every cell/entry of [grid]. This function is responsible for  computing
+     * the desired result count.
+     */
+    private fun iterateOverGridAndDetermineResultCount(
+        grid: TwoDLetterGrid,
+        resultCountFun: (rowIndex: Int, columnIndex: Int) -> Boolean
+    ): Int {
+        var resultCount = 0
+
+        grid.indices.forEach { rowIndex ->
+            grid[rowIndex].indices.forEach { columnIndex ->
+                if (resultCountFun(rowIndex, columnIndex)) {
+                    resultCount++
+                }
+            }
+        }
+
+        return resultCount
     }
 
-    private fun transposeGrid(letterGrid: TwoDGrid): TwoDGrid {
+    private fun transposeGrid(letterGrid: TwoDLetterGrid): TwoDLetterGrid {
         val cols = letterGrid[0].size
         val rows = letterGrid.size
         return List(cols) { j ->
@@ -69,7 +91,7 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         }
     }
 
-    private fun getDiagonalLines(letterGrid: TwoDGrid): List<List<Char>> {
+    private fun getDiagonalLines(letterGrid: TwoDLetterGrid): List<List<Char>> {
         val diagonalLines = mutableListOf<List<Char>>()
 
         // Upper-right part from left to right
@@ -149,7 +171,7 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         return diagonalLines.toList()
     }
 
-    private fun findOccurrencesInLinesForward(letterGrid: TwoDGrid): Int {
+    private fun findOccurrencesInLinesForward(letterGrid: TwoDLetterGrid): Int {
         var count = 0
         letterGrid.forEach { row ->
             val stringifiedRow = row.joinToString("")
@@ -158,7 +180,7 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         return count
     }
 
-    private fun findOccurrencesInLinesBackward(letterGrid: TwoDGrid): Int {
+    private fun findOccurrencesInLinesBackward(letterGrid: TwoDLetterGrid): Int {
         var count = 0
         letterGrid.forEach { row ->
             val stringifiedRow = row.reversed().joinToString("")
@@ -167,54 +189,53 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         return count
     }
 
-    private fun findNumberOfXmasCrosses(letterGrid: TwoDGrid): Int {
-        var totalCount = 0
-        var row = 1
-        var column = 1
-
-        while (row < letterGrid.size - 1) {
-            while (column < letterGrid[row].size - 1) {
-                if (letterGrid[row][column] == 'A') {
-                    // Find
-                    // M     M
-                    //    A
-                    // S     S
-                    if (letterGrid[row-1][column-1] == 'M' && letterGrid[row+1][column+1] == 'S' &&
-                        letterGrid[row-1][column+1] == 'M' && letterGrid[row+1][column-1] == 'S') {
-                        totalCount++
-                    }
-                    // Find
-                    // M     S
-                    //    A
-                    // M     S
-                    else if (letterGrid[row-1][column-1] == 'M' && letterGrid[row+1][column+1] == 'S' &&
-                        letterGrid[row-1][column+1] == 'S' && letterGrid[row+1][column-1] == 'M') {
-                        totalCount++
-                    }
-                    // Find
-                    // S     M
-                    //    A
-                    // S     M
-                    else if (letterGrid[row-1][column-1] == 'S' && letterGrid[row+1][column+1] == 'M' &&
-                        letterGrid[row-1][column+1] == 'M' && letterGrid[row+1][column-1] == 'S') {
-                        totalCount++
-                    }
-                    // Find
-                    // S     S
-                    //    A
-                    // M     M
-                    else if (letterGrid[row-1][column-1] == 'S' && letterGrid[row+1][column+1] == 'M' &&
-                        letterGrid[row-1][column+1] == 'S' && letterGrid[row+1][column-1] == 'M') {
-                        totalCount++
-                    }
+    /**
+     * This function solves Puzzle 2 by counting the number of X-MAS crosses.
+     */
+    private fun findNumberOfXmasCrosses(letterGrid: TwoDLetterGrid): Int =
+        iterateOverGridAndDetermineResultCount(letterGrid) { rowIndex, columnIndex ->
+            if (rowIndex == 0 || rowIndex == letterGrid.size - 1 ||
+                columnIndex == 0 || columnIndex == letterGrid[rowIndex].size - 1 ||
+                letterGrid[rowIndex][columnIndex] != 'A'
+            ) {
+                false
+            } else {
+                // Check if we have the following constellations
+                // M     M
+                //    A
+                // S     S
+                if (letterGrid[rowIndex - 1][columnIndex - 1] == 'M' && letterGrid[rowIndex + 1][columnIndex + 1] == 'S' &&
+                    letterGrid[rowIndex - 1][columnIndex + 1] == 'M' && letterGrid[rowIndex + 1][columnIndex - 1] == 'S'
+                ) {
+                    true
                 }
-                column++
+                // M     S
+                //    A
+                // M     S
+                else if (letterGrid[rowIndex - 1][columnIndex - 1] == 'M' && letterGrid[rowIndex + 1][columnIndex + 1] == 'S' &&
+                    letterGrid[rowIndex - 1][columnIndex + 1] == 'S' && letterGrid[rowIndex + 1][columnIndex - 1] == 'M'
+                ) {
+                    true
+                }
+                // S     M
+                //    A
+                // S     M
+                else if (letterGrid[rowIndex - 1][columnIndex - 1] == 'S' && letterGrid[rowIndex + 1][columnIndex + 1] == 'M' &&
+                    letterGrid[rowIndex - 1][columnIndex + 1] == 'M' && letterGrid[rowIndex + 1][columnIndex - 1] == 'S'
+                ) {
+                    true
+                }
+                // S     S
+                //    A
+                // M     M
+                else if (letterGrid[rowIndex - 1][columnIndex - 1] == 'S' && letterGrid[rowIndex + 1][columnIndex + 1] == 'M' &&
+                    letterGrid[rowIndex - 1][columnIndex + 1] == 'S' && letterGrid[rowIndex + 1][columnIndex - 1] == 'M'
+                ) {
+                    true
+                } else {
+                    false
+                }
             }
-            column = 1
-            row ++
         }
-
-        return totalCount
-    }
 
 }
