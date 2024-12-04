@@ -1,6 +1,5 @@
-package de.ptrckkk.aoc24.day01
+package de.ptrckkk.aoc24
 
-import de.ptrckkk.aoc24.PerDayPuzzleSolver
 import kotlin.math.abs
 
 class PuzzleSolverDay01: PerDayPuzzleSolver() {
