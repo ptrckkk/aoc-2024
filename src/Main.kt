@@ -17,11 +17,11 @@ fun main() {
     // Day 4, example Puzzle 1
     val solverDay04 = PuzzleSolverDay04()
     val actualSampleResultDay4Puzzle1 = solverDay04.solvePuzzleOne("example-input-day-04.txt")
-    assertResult(0, actualSampleResultDay4Puzzle1, "Solution for 'Example Day 4, Puzzle 1' wrong")
+    assertResult(18, actualSampleResultDay4Puzzle1, "Solution for 'Example Day 4, Puzzle 1' wrong")
 
     // Day 4, Puzzle 1
     val actualResultDay4Puzzle1 = solverDay04.solvePuzzleOne("input-day-04.txt")
-    assertResult(0, actualResultDay4Puzzle1, "Solution for 'Day 4, Puzzle 1' wrong")
+    assertResult(2500, actualResultDay4Puzzle1, "Solution for 'Day 4, Puzzle 1' wrong")
 
     // Day 4, example Puzzle 2
     val actualSampleResultDay4Puzzle2 = solverDay04.solvePuzzleTwo("example-input-day-04.txt")
