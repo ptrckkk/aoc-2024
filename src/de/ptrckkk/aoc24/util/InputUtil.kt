@@ -7,6 +7,10 @@ import java.io.IOException
  */
 class InputUtil {
 
+    companion object {
+        private val SPLIT_SPACES_REG_EX = "\\s+".toRegex()
+    }
+
     /**
      * Reads the content of a file located within the `resources` folder.
      *
@@ -27,17 +31,40 @@ class InputUtil {
      * element in the returned pair.
      */
     fun readTwoNumbersWhichAreSeparatedBySpaces(lines: List<String>): Pair<List<Int>, List<Int>> {
-        val splitSpacesRexEx = "\\s+".toRegex()
         val listOfFirstValues = mutableListOf<Int>()
         val listOfSecondValues = mutableListOf<Int>()
 
         lines.forEach {
-            val numbers = it.split(splitSpacesRexEx)
+            val numbers = it.split(SPLIT_SPACES_REG_EX)
             listOfFirstValues.add(numbers[0].toInt())
             listOfSecondValues.add(numbers[1].toInt())
         }
 
         return Pair(listOfFirstValues, listOfSecondValues)
+    }
+
+    /**
+     * Reads lines and splits them into the number making up the lines; numbers are separated by any number of spaces.
+     * The different lines can have a varying number of entries/numbers.
+     *
+     * Note that **empty lines are NOT allowed**!
+     *
+     * For example, consider the following valid sample [lines]:
+     * ```
+     *  0  1   5 77
+     *  20 40
+     *  10
+     * ```
+     */
+    fun readFileWithVaryingNumberOfNumbers(lines: List<String>): List<List<Int>> {
+        val outerList = mutableListOf<List<Int>>()
+
+        lines.forEach {
+            val numbers = it.split(SPLIT_SPACES_REG_EX).map { it.toInt() }
+            outerList.add(numbers)
+        }
+
+        return outerList.toList()
     }
 
 }
