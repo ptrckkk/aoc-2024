@@ -21,6 +21,8 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         var totalCount = 0
 
         val letterGrid = fileContentTo2DArray(fileContent)
+        findNumberOfXmas(letterGrid, WORD_TO_FIND)
+
         totalCount += findOccurrencesInLinesForward(letterGrid)
         totalCount += findOccurrencesInLinesBackward(letterGrid)
 
@@ -187,6 +189,109 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
             count += REG_EX_WORD_TO_FIND.findAll(stringifiedRow).count()
         }
         return count
+    }
+
+    private fun findNumberOfXmas(letterGrid: TwoDLetterGrid, wordToFind: String): Int {
+        val firstLetterOfWordToFind = wordToFind[0]
+        val reversedWordToFind = wordToFind.reversed()
+        return iterateOverGridAndDetermineResultCount(letterGrid) { rowIndex, columnIndex ->
+            if (letterGrid[rowIndex][columnIndex] == firstLetterOfWordToFind) {
+                if (hasSearchWordToTheTop(letterGrid, wordToFind, rowIndex, columnIndex)) {
+                    true
+                } else {
+                    false
+                }
+            } else {
+                false
+            }
+        }
+    }
+
+    private fun hasSearchWordToTheTop(
+        letterGrid: TwoDLetterGrid, wordToFind: String, rowOfFirstLetter: Int, columnOfFirstLetter: Int
+    ): Boolean {
+        for (offset in 1..<wordToFind.length) {
+            val rowToCheck = rowOfFirstLetter - offset
+            if (rowToCheck < 0 || letterGrid[rowToCheck][columnOfFirstLetter] != wordToFind[offset]) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun hasSearchWordToTheTopLeft(
+        letterGrid: TwoDLetterGrid, wordToFind: String, rowOfFirstLetter: Int, columnOfFirstLetter: Int
+    ): Boolean {
+        for (offset in 1..<wordToFind.length) {
+            val rowToCheck = rowOfFirstLetter - offset
+            val columnToCheck = columnOfFirstLetter - offset
+            if (rowToCheck < 0 || columnToCheck < 0 ||
+                letterGrid[rowToCheck][columnOfFirstLetter] != wordToFind[offset]
+            ) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun hasSearchWordToTheLeft(
+        letterGrid: TwoDLetterGrid, wordToFind: String, rowOfFirstLetter: Int, columnOfFirstLetter: Int
+    ): Boolean {
+        for (offset in 1..<wordToFind.length) {
+            val columnToCheck = columnOfFirstLetter - offset
+            if (columnToCheck < 0 || letterGrid[rowOfFirstLetter][columnOfFirstLetter] != wordToFind[offset]) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun hasSearchWordToTheBottomLeft(
+        letterGrid: TwoDLetterGrid, wordToFind: String, rowOfFirstLetter: Int, columnOfFirstLetter: Int
+    ): Boolean {
+        for (offset in 1..<wordToFind.length) {
+            val rowToCheck = rowOfFirstLetter + offset
+            val columnToCheck = columnOfFirstLetter - offset
+            if (rowToCheck >= letterGrid.size || columnToCheck < 0 ||
+                letterGrid[rowToCheck][columnToCheck] != wordToFind[offset]
+            ) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun hasSearchWordToTheBottom(
+        letterGrid: TwoDLetterGrid, wordToFind: String, rowOfFirstLetter: Int, columnOfFirstLetter: Int
+    ): Boolean {
+        for (offset in 1..<wordToFind.length) {
+            val rowToCheck = rowOfFirstLetter + offset
+            if (rowToCheck >= letterGrid.size || letterGrid[rowToCheck][columnOfFirstLetter] != wordToFind[offset]
+            ) {
+                return false
+            }
+        }
+
+        return true
+    }
+
+    private fun hasSearchWordToTheBottomRight(
+        letterGrid: TwoDLetterGrid, wordToFind: String, rowOfFirstLetter: Int, columnOfFirstLetter: Int
+    ): Boolean {
+        for (offset in 1..<wordToFind.length) {
+            val rowToCheck = rowOfFirstLetter + offset
+            val columnToCheck = columnOfFirstLetter + offset
+            if (rowToCheck >= letterGrid.size || columnToCheck >= letterGrid[rowToCheck].size || letterGrid[rowOfFirstLetter][columnOfFirstLetter] != wordToFind[offset]
+            ) {
+                return false
+            }
+        }
+
+        return true
     }
 
     /**
