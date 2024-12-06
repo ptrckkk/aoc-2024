@@ -14,19 +14,20 @@ fun main() {
     // Day 5, example Puzzle 1
     val solverDay05 = PuzzleSolverDay05()
     val actualSampleResultDay5Puzzle1 = solverDay05.solvePuzzleOne("example-input-day-05.txt")
-    assertResult(0, actualSampleResultDay5Puzzle1, "Solution for 'Example Day 5, Puzzle 1' wrong")
+    assertResult(143, actualSampleResultDay5Puzzle1, "Solution for 'Example Day 5, Puzzle 1' wrong")
 
     // Day 5, Puzzle 1
     val actualResultDay5Puzzle1 = solverDay05.solvePuzzleOne("input-day-05.txt")
-    assertResult(0, actualResultDay5Puzzle1, "Solution for 'Day 5, Puzzle 1' wrong")
+    print(actualResultDay5Puzzle1)
+    assertResult(6267, actualResultDay5Puzzle1, "Solution for 'Day 5, Puzzle 1' wrong")
 
     // Day 5, example Puzzle 2
-    val actualSampleResultDay5Puzzle2 = solverDay05.solvePuzzleTwo("example-input-day-05-puzzle-2.txt")
-    assertResult(0, actualSampleResultDay5Puzzle2, "Solution for 'Example Day 5, Puzzle 2' wrong")
+    // val actualSampleResultDay5Puzzle2 = solverDay05.solvePuzzleTwo("example-input-day-05-puzzle-2.txt")
+    // assertResult(0, actualSampleResultDay5Puzzle2, "Solution for 'Example Day 5, Puzzle 2' wrong")
 
     // Day 5, Puzzle 2
-    val actualResultDay5Puzzle2 = solverDay05.solvePuzzleTwo("input-day-05.txt")
-    assertResult(0, actualResultDay5Puzzle2, "Solution for 'Day 5, Puzzle 2' wrong")
+    // val actualResultDay5Puzzle2 = solverDay05.solvePuzzleTwo("input-day-05.txt")
+    // assertResult(0, actualResultDay5Puzzle2, "Solution for 'Day 5, Puzzle 2' wrong")
 
     // Day 4, example Puzzle 1
     val solverDay04 = PuzzleSolverDay04()
