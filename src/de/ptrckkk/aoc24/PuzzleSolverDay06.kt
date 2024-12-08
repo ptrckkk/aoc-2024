@@ -1,8 +1,5 @@
 package de.ptrckkk.aoc24
 
-enum class WalkingDirection {
-    LEFT, RIGHT, UP, DOWN
-}
 
 /**
  * A two-dimensional list where
@@ -10,11 +7,30 @@ enum class WalkingDirection {
  * - the inner elements denote elements within that row,
  * - and the [Boolean] value is `true` when at that position is an obstacle.
  */
-typealias RoomMap = List<List<Boolean>>
+typealias AreaMap = List<List<Boolean>>
+typealias MutableAreaMap = MutableList<MutableList<Boolean>>
+
 /**
- * The current postion of the guard (row and colum indexes) as well as the [WalkingDirection].
+ * The current position of the guard (row and colum in that order).
  */
-typealias Position = Triple<Int, Int, WalkingDirection>
+typealias Cell = Pair<Int, Int>
+
+fun AreaMap.isObstacleAt(row: Int, column: Int): Boolean = this[row][column]
+
+fun AreaMap.isWithinArea(row: Int, column: Int): Boolean {
+    return row >= 0 && column >= 0 && row < this.size && column < this[row].size
+}
+
+private enum class GuardsWalkingDirection(private val direction: Pair<Int, Int>) {
+    // Directions are in the form: row, column
+    UP(Pair(-1, 0)),
+    DOWN(Pair(1, 0)),
+    LEFT(Pair(0, -1)),
+    RIGHT(Pair(0, 1));
+
+    fun yDirection(): Int = direction.first
+    fun xDirection(): Int = direction.second
+}
 
 class PuzzleSolverDay06 : PerDayPuzzleSolver() {
 
@@ -24,10 +40,11 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Long {
+    override fun solvePuzzleOne(pathToInputFile: String): Int {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
-        val (roomMap, initialPosition) = buildRoomMapWithInitialGuardPostion(fileContent)
-        return letGuardWalkUntilLeavingAreaAndCountDistinctPositions(roomMap, initialPosition).toLong()
+        val (roomMap, initialPosition) = buildRoomMapWithInitialGuardPosition(fileContent)
+        val visitedCells = computeGuardsVisitedCell(roomMap, initialPosition)
+        return visitedCells.first.size
     }
 
     /**
@@ -36,12 +53,21 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Long {
-        TODO("Not yet implemented")
+    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+        val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
+        val (roomMap, initialPosition) = buildRoomMapWithInitialGuardPosition(fileContent)
+        val mutableRoomMap = makeRoomMapMutable(roomMap)
+        val visitedCellsWithoutInitialPosition = computeGuardsVisitedCell(roomMap, initialPosition).first.toMutableSet()
+        visitedCellsWithoutInitialPosition.remove(initialPosition)
+        val loopCount = visitedCellsWithoutInitialPosition.count { newObstaclePosition ->
+            doesGuardEndInLoopWhenWalkingWithAdditionalObstacle(mutableRoomMap, newObstaclePosition, initialPosition)
+        }
+
+        return loopCount
     }
 
-    private fun buildRoomMapWithInitialGuardPostion(fileContent: List<String>): Pair<RoomMap, Position> {
-        var initialPosition: Position? = null
+    private fun buildRoomMapWithInitialGuardPosition(fileContent: List<String>): Pair<AreaMap, Cell> {
+        var guardsStartCell: Cell? = null
         val roomMap = List(fileContent.size) { rowIndex ->
             List(fileContent[rowIndex].length) { columnIndex ->
                 when (fileContent[rowIndex][columnIndex]) {
@@ -49,85 +75,86 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
                     '#' -> true
                     else -> {
                         // In the given inputs, the initial walking direction is always up
-                        initialPosition = Position(rowIndex, columnIndex, WalkingDirection.UP)
+                        guardsStartCell = Cell(rowIndex, columnIndex)
                         false
                     }
                 }
             }
         }
 
-        if (initialPosition == null) {
+        if (guardsStartCell == null) {
             throw IllegalStateException("Could not determine the start position of the guard!")
         }
 
-        return roomMap to initialPosition!!
+        return roomMap to guardsStartCell!!
     }
 
-    private fun letGuardWalkUntilLeavingAreaAndCountDistinctPositions(
-        roomMap: RoomMap, startPosition: Position
-    ): Int {
-        // The assumption is that the start position is within the area
-        var hasLeftArea = false
+    private fun makeRoomMapMutable(roomMap: AreaMap): MutableAreaMap =
+        MutableList(roomMap.size) { rowIndex ->
+            roomMap[rowIndex].toMutableList()
+        }
 
-        // Visited positions with row indexes as the key and column indexes as the value
-        val distinctVisitedPositions = mutableMapOf<Int, Int>()
-        distinctVisitedPositions[startPosition.first] = startPosition.second
+    private fun computeGuardsVisitedCell(
+        roomMap: AreaMap, guardsStartCell: Cell
+    ): Pair<Set<Pair<Int, Int>>, Boolean> {
+        // Initial position is in form: row, column
+        var y = guardsStartCell.first
+        var x = guardsStartCell.second
 
-        var currentPosition = startPosition
-        while (!hasLeftArea) {
-            currentPosition = computeNextPosition(currentPosition, roomMap)
-            if (currentPosition.first >= 0 && currentPosition.second >= 0) {
-                distinctVisitedPositions[currentPosition.first] = currentPosition.second
+        // By default, the guard always walks up (derived from the task description)
+        var direction = GuardsWalkingDirection.UP
+
+        // The initial position is visited by default
+        val visitedCells = mutableSetOf(guardsStartCell)
+        val visitedPositionsWithDirection = mutableSetOf(
+            Triple(guardsStartCell.first, guardsStartCell.second, direction)
+        )
+
+        var isWithinArea = true
+        var guardWalksInLoop = false
+
+        while (isWithinArea && !guardWalksInLoop) {
+            // Look-ahead
+            val newY = y + direction.yDirection()
+            val newX = x + direction.xDirection()
+            if (roomMap.isWithinArea(newY, newX)) {
+                if (roomMap.isObstacleAt(newY, newX)) {
+                    // Obstacle => change direction (and continue walking in next iteration)
+                    direction = when (direction) {
+                        GuardsWalkingDirection.UP -> GuardsWalkingDirection.RIGHT
+                        GuardsWalkingDirection.RIGHT -> GuardsWalkingDirection.DOWN
+                        GuardsWalkingDirection.DOWN -> GuardsWalkingDirection.LEFT
+                        else -> GuardsWalkingDirection.UP
+                    }
+                } else {
+                    // No obstacle => do housekeeping and continue walking
+                    visitedCells.add(newY to newX)
+
+                    val positionsWithDirection = Triple(newY, newX, direction)
+                    if (visitedPositionsWithDirection.contains(positionsWithDirection)) {
+                        guardWalksInLoop = true
+                        continue
+                    }
+                    visitedPositionsWithDirection.add(positionsWithDirection)
+
+                    y = newY
+                    x = newX
+                }
             } else {
-                hasLeftArea = true
+                isWithinArea = false
             }
         }
 
-        return distinctVisitedPositions.size
+        return visitedCells to guardWalksInLoop
     }
 
-    private fun computeNextPosition(currentPosition: Position, roomMap: RoomMap): Position {
-        val (currentRow, currentColumn, direction) = currentPosition
-
-        if (direction == WalkingDirection.UP && (currentRow - 1 >= 0) && !roomMap[currentRow - 1][currentColumn]) {
-            // Can walk up
-            return Position(currentRow - 1, currentColumn, WalkingDirection.UP)
-        } else if (direction == WalkingDirection.UP && (currentRow - 1 == -1)) {
-            // Out-of area by walking up
-            return Position(-1, currentColumn, WalkingDirection.UP)
-        } else if (direction == WalkingDirection.UP && (currentRow - 1 >= 0) && roomMap[currentRow - 1][currentColumn]) {
-            // Walk right as upwards is an obstacle
-            return Position(currentRow, currentColumn + 1, WalkingDirection.RIGHT)
-        } else if (direction == WalkingDirection.RIGHT && (currentColumn + 1 < roomMap[currentRow].size && !roomMap[currentRow - 1][currentColumn])) {
-            // Can walk right
-            return Position(currentRow, currentColumn + 1, WalkingDirection.RIGHT)
-        } else if (direction == WalkingDirection.RIGHT && (currentColumn + 1 == roomMap[currentRow].size)) {
-            // Out-of area by walking right
-            return Position(currentRow, currentColumn + 1, WalkingDirection.RIGHT)
-        } else if (direction == WalkingDirection.RIGHT && (currentColumn + 1 < roomMap[currentRow].size && roomMap[currentRow - 1][currentColumn])) {
-            // Walk down as rightwards is an obstacle
-            return Position(currentRow + 1, currentColumn, WalkingDirection.DOWN)
-        } else if (direction == WalkingDirection.DOWN && (currentRow + 1 < roomMap.size && !roomMap[currentRow + 1][currentColumn])) {
-            // Can walk down
-            return Position(currentRow + 1, currentColumn, WalkingDirection.DOWN)
-        } else if (direction == WalkingDirection.DOWN && (currentRow + 1 == roomMap.size)) {
-            // Out-of-area by walking down
-            return Position(currentRow + 1, currentColumn, WalkingDirection.DOWN)
-        } else if (direction == WalkingDirection.DOWN && (currentRow + 1 < roomMap.size && roomMap[currentRow + 1][currentColumn])) {
-            // Walk left as downwards is an obstacle
-            return Position(currentRow, currentColumn - 1, WalkingDirection.LEFT)
-        } else if (direction == WalkingDirection.LEFT && (currentColumn - 1 >= 0 && !roomMap[currentRow][currentColumn - 1])) {
-            // Can walk left
-            return Position(currentRow, currentColumn - 1, WalkingDirection.LEFT)
-        } else if (direction == WalkingDirection.LEFT && (currentColumn - 1 == -1)) {
-            // Out-of-area by walking left
-            return Position(currentRow, -1, WalkingDirection.LEFT)
-        } else if (direction == WalkingDirection.LEFT && (currentColumn - 1 >= 0 && roomMap[currentRow][currentColumn - 1])) {
-            // Walk top as leftwards is an obstacle
-            return Position(currentRow - 1, currentColumn, WalkingDirection.UP)
-        } else {
-            throw IllegalStateException("Case not caught! Very bad, Mr. programmer!")
-        }
+    private fun doesGuardEndInLoopWhenWalkingWithAdditionalObstacle(
+        roomMap: MutableAreaMap, positionObstacle: Cell, guardsStartCell: Cell
+    ): Boolean {
+        roomMap[positionObstacle.first][positionObstacle.second] = true
+        val endsInLoop = computeGuardsVisitedCell(roomMap, guardsStartCell).second
+        roomMap[positionObstacle.first][positionObstacle.second] = false
+        return endsInLoop
     }
 
 }
