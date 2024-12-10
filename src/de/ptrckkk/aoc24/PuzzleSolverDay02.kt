@@ -10,10 +10,10 @@ class PuzzleSolverDay02 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val reportList = inputUtil.readFileWithVaryingNumberOfNumbers(fileContent)
-        return determineNumberOfSafeReports(reportList)
+        return determineNumberOfSafeReports(reportList).toLong()
     }
 
     /**
@@ -22,10 +22,10 @@ class PuzzleSolverDay02 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val reportList = inputUtil.readFileWithVaryingNumberOfNumbers(fileContent)
-        return determineNumberOfSafeReportsWithDampener(reportList)
+        return determineNumberOfSafeReportsWithDampener(reportList).toLong()
     }
 
     /**

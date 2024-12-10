@@ -16,7 +16,7 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         var totalCount = 0
 
@@ -32,7 +32,7 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
         totalCount += findOccurrencesInLinesForward(diagonalizedGrid)
         totalCount += findOccurrencesInLinesBackward(diagonalizedGrid)
 
-        return totalCount
+        return totalCount.toLong()
     }
 
     /**
@@ -41,10 +41,10 @@ class PuzzleSolverDay04 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val letterGrid = fileContentTo2DArray(fileContent)
-        return findNumberOfXmasCrosses(letterGrid)
+        return findNumberOfXmasCrosses(letterGrid).toLong()
     }
 
     /**

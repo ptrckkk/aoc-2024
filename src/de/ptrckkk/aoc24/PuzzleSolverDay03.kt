@@ -14,11 +14,11 @@ class PuzzleSolverDay03 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile).joinToString("")
         val allMulOperations = extractAllMulOperations(fileContent)
         val sumOfMulOperations = computeSumOfMuls(allMulOperations)
-        return sumOfMulOperations
+        return sumOfMulOperations.toLong()
     }
 
     /**
@@ -27,12 +27,12 @@ class PuzzleSolverDay03 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile).joinToString("")
         val allMulDoDontOperations = extractAllMulDoAndDontOperations(fileContent)
         val allEnabledMulOperations = extractEnabledMulOperations(allMulDoDontOperations)
         val sumOfMulOperations = computeSumOfMuls(allEnabledMulOperations)
-        return sumOfMulOperations
+        return sumOfMulOperations.toLong()
     }
 
     /**

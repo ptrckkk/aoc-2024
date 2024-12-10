@@ -10,12 +10,12 @@ class PuzzleSolverDay01: PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (list1, list2) = inputUtil.readTwoNumbersWhichAreSeparatedBySpaces(fileContent)
         val sortedList1 = list1.sorted()
         val sortedList2 = list2.sorted()
-        return computeTotalDistancesBetweenLists(sortedList1, sortedList2)
+        return computeTotalDistancesBetweenLists(sortedList1, sortedList2).toLong()
     }
 
     /**
@@ -24,10 +24,10 @@ class PuzzleSolverDay01: PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (list1, list2) = inputUtil.readTwoNumbersWhichAreSeparatedBySpaces(fileContent)
-        return computeSimilarityScoreForLists(list1, list2)
+        return computeSimilarityScoreForLists(list1, list2).toLong()
     }
 
     /**

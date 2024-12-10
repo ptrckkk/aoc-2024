@@ -4,13 +4,23 @@ import de.ptrckkk.aoc24.*
  * Asserts that the [expected] value equals the [actual] value. If these values are not the same, the given [message]
  * is output along with the [expected] and [actual] values.
  */
-fun assertResult(expected: Int, actual: Int, message: String) {
+fun assertResult(expected: Long, actual: Long, message: String) {
     require(
         expected == actual,
     ) { "$message! expected=$expected != actual=$actual" }
 }
 
 fun main() {
+    // Day 9, example Puzzle 1
+    val solverDay09 = PuzzleSolverDay09()
+    val actualSampleResultDay9Puzzle1 = solverDay09.solvePuzzleOne("example-input-day-09.txt")
+    assertResult(1928, actualSampleResultDay9Puzzle1, "Solution for 'Example Day 9, Puzzle 1' wrong")
+
+    // Day 9, Puzzle 1
+    val actualResultDay9Puzzle1 = solverDay09.solvePuzzleOne("input-day-09.txt")
+    print(actualResultDay9Puzzle1)
+    assertResult(0, actualResultDay9Puzzle1, "Solution for 'Day 9, Puzzle 1' wrong")
+
     // Day 6, example Puzzle 1
     val solverDay06 = PuzzleSolverDay06()
     val actualSampleResultDay6Puzzle1 = solverDay06.solvePuzzleOne("example-input-day-06.txt")

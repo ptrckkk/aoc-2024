@@ -15,7 +15,7 @@ abstract class PerDayPuzzleSolver{
      * [pathToInputFile] is the path within the resource directory pointing to the input file, such as
      * "my-folder/input.txt".
      */
-    abstract fun solvePuzzleOne(pathToInputFile: String): Int
+    abstract fun solvePuzzleOne(pathToInputFile: String): Long
 
     /**
      * Solves the second puzzle of a day using the provided [pathToInputFile].
@@ -23,6 +23,6 @@ abstract class PerDayPuzzleSolver{
      * [pathToInputFile] is the path within the resource directory pointing to the input file, such as
      * "my-folder/input.txt".
      */
-    abstract fun solvePuzzleTwo(pathToInputFile: String): Int
+    abstract fun solvePuzzleTwo(pathToInputFile: String): Long
 
 }

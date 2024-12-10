@@ -8,7 +8,7 @@ class PuzzleSolverDay05: PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (pageOrderingRules, pageNumbersOfUpdates) = splitInputContent(fileContent)
 
@@ -18,7 +18,7 @@ class PuzzleSolverDay05: PerDayPuzzleSolver() {
         val correctlyOrderedUpdates = determineCorrectlyOrderedUpdates(pageNumbersOfUpdates, predecessorMapping)
         val middleElements = determineMiddleElements(correctlyOrderedUpdates)
 
-        return middleElements.sum()
+        return middleElements.sum().toLong()
     }
 
     /**
@@ -27,7 +27,7 @@ class PuzzleSolverDay05: PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Long {
         TODO("Not yet implemented")
     }
 

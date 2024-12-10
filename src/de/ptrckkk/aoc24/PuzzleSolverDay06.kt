@@ -24,10 +24,10 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (roomMap, initialPosition) = buildRoomMapWithInitialGuardPostion(fileContent)
-        return letGuardWalkUntilLeavingAreaAndCountDistinctPositions(roomMap, initialPosition)
+        return letGuardWalkUntilLeavingAreaAndCountDistinctPositions(roomMap, initialPosition).toLong()
     }
 
     /**
@@ -36,7 +36,7 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Long {
         TODO("Not yet implemented")
     }
 
