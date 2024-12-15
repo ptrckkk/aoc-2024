@@ -40,11 +40,11 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleOne]
      */
-    override fun solvePuzzleOne(pathToInputFile: String): Int {
+    override fun solvePuzzleOne(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (roomMap, initialPosition) = buildRoomMapWithInitialGuardPosition(fileContent)
         val visitedCells = computeGuardsVisitedCell(roomMap, initialPosition)
-        return visitedCells.first.size
+        return visitedCells.first.size.toLong()
     }
 
     /**
@@ -53,7 +53,7 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
      *
      * @see [PerDayPuzzleSolver.solvePuzzleTwo]
      */
-    override fun solvePuzzleTwo(pathToInputFile: String): Int {
+    override fun solvePuzzleTwo(pathToInputFile: String): Long {
         val fileContent = inputUtil.readContentOfResourceFile(pathToInputFile)
         val (roomMap, initialPosition) = buildRoomMapWithInitialGuardPosition(fileContent)
         val mutableRoomMap = makeRoomMapMutable(roomMap)
@@ -63,7 +63,7 @@ class PuzzleSolverDay06 : PerDayPuzzleSolver() {
             doesGuardEndInLoopWhenWalkingWithAdditionalObstacle(mutableRoomMap, newObstaclePosition, initialPosition)
         }
 
-        return loopCount
+        return loopCount.toLong()
     }
 
     private fun buildRoomMapWithInitialGuardPosition(fileContent: List<String>): Pair<AreaMap, Cell> {
